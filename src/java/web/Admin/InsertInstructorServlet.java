@@ -6,7 +6,7 @@ import java.util.*;
 import javax.servlet.*;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
-import web.Database_Conn;
+import web.DatabaseConnection;
 
 @WebServlet("/InsertInstructorServlet")
 public class InsertInstructorServlet extends HttpServlet {
@@ -26,14 +26,14 @@ public class InsertInstructorServlet extends HttpServlet {
             return;
         }
 
-        try (Connection conn = Database_Conn.getConnection()) {
-            // Check if instructor already exists
+        try (Connection conn = DatabaseConnection.getConnection()) {
+            // Check if instructor with the same full name exists
             String checkSql = "SELECT * FROM Users WHERE Full_Name = ?";
             PreparedStatement checkStmt = conn.prepareStatement(checkSql);
             checkStmt.setString(1, fullName);
-            ResultSet checkRs = checkStmt.executeQuery();
+            ResultSet checkResult = checkStmt.executeQuery();
 
-            if (checkRs.next()) {
+            if (checkResult.next()) {
                 request.setAttribute("error", "duplicate");
                 request.setAttribute("courseList", loadCourses());
                 request.getRequestDispatcher("admin/add_instructor.jsp").forward(request, response);
@@ -54,7 +54,6 @@ public class InsertInstructorServlet extends HttpServlet {
                 instructorId = generatedKeys.getInt(1);
             }
 
-            // Insert course relations
             String insertRelation = "INSERT INTO instructor_course (Instructor_ID, Course_Num) VALUES (?, ?)";
             PreparedStatement relationStmt = conn.prepareStatement(insertRelation);
 
@@ -77,7 +76,7 @@ public class InsertInstructorServlet extends HttpServlet {
 
     private List<Map<String, String>> loadCourses() {
         List<Map<String, String>> courseList = new ArrayList<>();
-        try (Connection conn = Database_Conn.getConnection()) {
+        try (Connection conn = DatabaseConnection.getConnection()) {
             String sql = "SELECT Course_Num, Course_Name FROM Courses";
             PreparedStatement stmt = conn.prepareStatement(sql);
             ResultSet rs = stmt.executeQuery();

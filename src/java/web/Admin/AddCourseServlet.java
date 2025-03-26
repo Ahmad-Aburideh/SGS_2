@@ -1,6 +1,6 @@
 package web.Admin;
 
-import web.Database_Conn;
+import web.DatabaseConnection;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -17,7 +17,7 @@ public class AddCourseServlet extends HttpServlet {
 
         String courseName = request.getParameter("courseName");
 
-        try (Connection conn = Database_Conn.getConnection()) {
+        try (Connection conn = DatabaseConnection.getConnection()) {
 
             // Check if course already exists
             String checkSql = "SELECT * FROM Courses WHERE Course_Name = ?";

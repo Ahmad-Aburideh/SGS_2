@@ -75,7 +75,8 @@
             <% } %>
         </table>
     <%
-        } else {
+        } 
+    else {
     %>
         <p>You Are Not Registered In Any Courses.</p>
     <%

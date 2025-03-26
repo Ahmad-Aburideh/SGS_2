@@ -6,7 +6,7 @@ import java.util.*;
 import javax.servlet.*;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
-import web.Database_Conn;
+import web.DatabaseConnection;
 
 @WebServlet("/StudentPortalServlet")
 public class StudentPortalServlet extends HttpServlet {
@@ -24,7 +24,7 @@ public class StudentPortalServlet extends HttpServlet {
         int studentId = (int) session.getAttribute("UserId");
         List<StudentGrade> grades = new ArrayList<>();
 
-        try (Connection conn = Database_Conn.getConnection()) {
+        try (Connection conn = DatabaseConnection.getConnection()) {
             String sql = """
                 SELECT c.Course_Name, r.Grade, u.Full_Name AS Instructor_Name
                 FROM registrations r

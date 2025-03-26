@@ -104,7 +104,8 @@
         </div>
 
     <%
-        } else {
+        } 
+    else {
     %>
         <p>You don't Have Any Registered Students.</p>
     <%

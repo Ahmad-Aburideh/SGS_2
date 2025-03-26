@@ -1,6 +1,6 @@
 package web.Admin;
 
-import web.Database_Conn;
+import web.DatabaseConnection;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -17,30 +17,30 @@ public class EnrollStudentServlet extends HttpServlet {
         String studentName = request.getParameter("student");
         String instructorCourseIdStr = request.getParameter("instructorCourse");
 
-        try (Connection conn = Database_Conn.getConnection()) {
+        try (Connection conn = DatabaseConnection.getConnection()) {
 
             // Get Student ID
             String studentQuery = "SELECT User_ID FROM Users WHERE Full_Name = ?";
             PreparedStatement studentStmt = conn.prepareStatement(studentQuery);
             studentStmt.setString(1, studentName);
-            ResultSet studentRs = studentStmt.executeQuery();
+            ResultSet studentResult = studentStmt.executeQuery();
 
             int studentId = -1;
-            if (studentRs.next()) {
-                studentId = studentRs.getInt("User_ID");
+            if (studentResult.next()) {
+                studentId = studentResult.getInt("User_ID");
             }
 
             int instructorCourseId = Integer.parseInt(instructorCourseIdStr);
 
-            // Get Course_Num linked with Instructor_Course_ID
+            // Get Course_Num associetad with Instructor_Course_ID
             String courseNumQuery = "SELECT Course_Num FROM instructor_course WHERE ID = ?";
             PreparedStatement courseNumStmt = conn.prepareStatement(courseNumQuery);
             courseNumStmt.setInt(1, instructorCourseId);
-            ResultSet courseNumRs = courseNumStmt.executeQuery();
+            ResultSet courseNumber = courseNumStmt.executeQuery();
 
             int courseNum = -1;
-            if (courseNumRs.next()) {
-                courseNum = courseNumRs.getInt("Course_Num");
+            if (courseNumber.next()) {
+                courseNum = courseNumber.getInt("Course_Num");
             }
 
             // Check if student is already registered for the same Course_Num with any instructor
@@ -55,7 +55,7 @@ public class EnrollStudentServlet extends HttpServlet {
             ResultSet checkRs = checkStmt.executeQuery();
 
             if (checkRs.next()) {
-                // Already registered – redirect with error
+                // if Already registered , display error message
                 response.sendRedirect("LoadEnrollmentDataServlet?error=duplicate");
                 return;
             }

@@ -6,7 +6,7 @@ import java.util.*;
 import javax.servlet.*;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
-import web.Database_Conn;
+import web.DatabaseConnection;
 
 @WebServlet("/AdminPortalServlet")
 public class AdminPortalServlet extends HttpServlet {
@@ -21,15 +21,15 @@ public class AdminPortalServlet extends HttpServlet {
             return;
         }
 
-        try (Connection conn = Database_Conn.getConnection()) {
+        try (Connection conn = DatabaseConnection.getConnection()) {
 
           
             List<String> instructors = new ArrayList<>();
             String sql1 = "SELECT Full_Name FROM Users WHERE Role = 'INSTRUCTOR'";
             Statement stmt1 = conn.createStatement();
-            ResultSet rs1 = stmt1.executeQuery(sql1);
-            while (rs1.next()) {
-                instructors.add(rs1.getString("Full_Name"));
+            ResultSet result = stmt1.executeQuery(sql1);
+            while (result.next()) {
+                instructors.add(result.getString("Full_Name"));
             }
 
             

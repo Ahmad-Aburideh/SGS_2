@@ -7,7 +7,7 @@ import javax.servlet.RequestDispatcher;
 import java.io.IOException;
 import java.sql.*;
 import java.util.*;
-import web.Database_Conn;
+import web.DatabaseConnection;
 
 @WebServlet("/LoadEnrollmentDataServlet")
 public class LoadEnrollmentDataServlet extends HttpServlet {
@@ -31,7 +31,7 @@ public class LoadEnrollmentDataServlet extends HttpServlet {
         List<String> students = new ArrayList<>();
         List<Map<String, String>> instructorCourses = new ArrayList<>();
 
-        try (Connection conn = Database_Conn.getConnection()) {
+        try (Connection conn = DatabaseConnection.getConnection()) {
 
             // Fetch students
             String studentSql = "SELECT Full_Name FROM Users WHERE Role = 'STUDENT'";
@@ -50,12 +50,12 @@ public class LoadEnrollmentDataServlet extends HttpServlet {
             """;
 
             PreparedStatement icStmt = conn.prepareStatement(icSql);
-            ResultSet icRs = icStmt.executeQuery();
-            while (icRs.next()) {
+            ResultSet instResult = icStmt.executeQuery();
+            while (instResult.next()) {
                 Map<String, String> map = new HashMap<>();
-                map.put("Instructor_Course_ID", String.valueOf(icRs.getInt("Instructor_Course_ID")));
-                map.put("Instructor_Name", icRs.getString("InstructorName"));
-                map.put("Course_Name", icRs.getString("Course_Name"));
+                map.put("Instructor_Course_ID", String.valueOf(instResult.getInt("Instructor_Course_ID")));
+                map.put("Instructor_Name", instResult.getString("InstructorName"));
+                map.put("Course_Name", instResult.getString("Course_Name"));
                 instructorCourses.add(map);
             }
 

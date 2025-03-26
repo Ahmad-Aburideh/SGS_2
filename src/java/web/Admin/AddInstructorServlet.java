@@ -6,7 +6,7 @@ import java.util.*;
 import javax.servlet.*;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
-import web.Database_Conn;
+import web.DatabaseConnection;
 
 @WebServlet("/AddInstructorServlet")
 public class AddInstructorServlet extends HttpServlet {
@@ -24,7 +24,7 @@ public class AddInstructorServlet extends HttpServlet {
 
         List<Map<String, String>> courseList = new ArrayList<>();
 
-        try (Connection conn = Database_Conn.getConnection()) {
+        try (Connection conn = DatabaseConnection.getConnection()) {
             String sql = "SELECT Course_Num, Course_Name FROM Courses";
             Statement stmt = conn.createStatement();
             ResultSet result = stmt.executeQuery(sql);
@@ -40,7 +40,8 @@ public class AddInstructorServlet extends HttpServlet {
             RequestDispatcher dispatcher = request.getRequestDispatcher("admin/add_instructor.jsp");
             dispatcher.forward(request, response);
 
-        } catch (SQLException excp) {
+        } 
+        catch (SQLException excp) {
             excp.printStackTrace();
             response.sendRedirect("admin/admin_portal.jsp?error=1");
         }

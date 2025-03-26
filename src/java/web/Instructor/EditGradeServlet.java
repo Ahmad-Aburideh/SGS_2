@@ -5,7 +5,7 @@ import java.sql.*;
 import javax.servlet.*;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
-import web.Database_Conn;
+import web.DatabaseConnection;
 
 @WebServlet("/EditGradeServlet")
 public class EditGradeServlet extends HttpServlet {
@@ -21,7 +21,7 @@ public class EditGradeServlet extends HttpServlet {
             int enrollmentId = Integer.parseInt(enrollmentIdStr);
             double newGrade = Double.parseDouble(newGradeStr);
 
-            try (Connection conn = Database_Conn.getConnection()) {
+            try (Connection conn = DatabaseConnection.getConnection()) {
                 String updateSql = "UPDATE registrations SET Grade = ? WHERE Enrollment_ID = ?";
                 PreparedStatement stmt = conn.prepareStatement(updateSql);
                 stmt.setDouble(1, newGrade);

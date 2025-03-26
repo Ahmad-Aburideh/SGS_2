@@ -6,7 +6,7 @@ import java.util.*;
 import javax.servlet.*;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
-import web.Database_Conn;
+import web.DatabaseConnection;
 
 @WebServlet("/InstructorPortalServlet")
 public class InstructorPortalServlet extends HttpServlet {
@@ -25,8 +25,8 @@ public class InstructorPortalServlet extends HttpServlet {
         List<InstructorGrade> gradeList = new ArrayList<>();
         List<Map<String, String>> instructorCourses = new ArrayList<>();
 
-        try (Connection conn = Database_Conn.getConnection()) {
-            // Load student grades
+        try (Connection conn = DatabaseConnection.getConnection()) {
+            // upload student grades
             String sql = """
                 SELECT r.Enrollment_ID, u.Full_Name AS StudentName, c.Course_Name, ic.Section, r.Grade
                 FROM registrations r
@@ -50,7 +50,7 @@ public class InstructorPortalServlet extends HttpServlet {
                 gradeList.add(row);
             }
 
-            // Load courses for dropdown list (for statistics)
+            // upload courses for dropdown list (for statistics)
             String courseSql = """
                 SELECT ic.ID AS InstructorCourseID, c.Course_Name, ic.Section
                 FROM instructor_course ic

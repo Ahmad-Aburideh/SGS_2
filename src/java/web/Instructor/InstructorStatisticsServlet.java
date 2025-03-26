@@ -1,6 +1,6 @@
 package web.Instructor;
 
-import web.Database_Conn;
+import web.DatabaseConnection;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -25,9 +25,9 @@ public class InstructorStatisticsServlet extends HttpServlet {
         }
 
         int instructorId = (int) session.getAttribute("UserId");
-        Map<String, Map<String, Double>> courseStats = new LinkedHashMap<>();
+        Map<String, Map<String, Double>> courseStatistis = new LinkedHashMap<>();
 
-        try (Connection conn = Database_Conn.getConnection()) {
+        try (Connection conn = DatabaseConnection.getConnection()) {
             String sql = """
                 SELECT c.Course_Name, r.Grade
                 FROM registrations r
@@ -68,10 +68,10 @@ public class InstructorStatisticsServlet extends HttpServlet {
                 stats.put("Max", max);
                 stats.put("Min", min);
 
-                courseStats.put(course, stats);
+                courseStatistis.put(course, stats);
             }
 
-            request.setAttribute("statistics", courseStats);
+            request.setAttribute("statistics", courseStatistis);
             RequestDispatcher dispatcher = request.getRequestDispatcher("instructor/instructor_statistics.jsp");
             dispatcher.forward(request, response);
 
